@@ -1,14 +1,11 @@
 <?php
 session_start();
-include = "../process/login.php";
 
 if (!isset($_SESSION['usuario']['id'])) {
     header("Location: index.php");
     exit;
 }
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -21,10 +18,10 @@ if (!isset($_SESSION['usuario']['id'])) {
 
 <body>
 
-<?php include 'tela/menu.php'; ?>
+<?php include __DIR__ . '/Tela/menu.php'; ?>
 
 <header>
-    <h2>Olá <? $usuario["nome"]; ?></h2>
+    <h2>Olá <?= htmlspecialchars($_SESSION['usuario']['nome'] ?? 'Usuário'); ?></h2>
     <p>Bem vindo ao sistema de gestão de desempenho de sua empresa</p>
 </header>
 

@@ -20,7 +20,7 @@ if (
     $senhavalida = password_hash($_POST['senha'], PASSWORD_DEFAULT);
     
   if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    header("Location: ../tela/cadastro.php?status=erro&msg=" . urlencode("Email inválido"));
+    header("Location: ../Tela/cadastro.php?status=erro&msg=" . urlencode("Email inválido"));
     exit();
 }  
  try {
@@ -30,7 +30,7 @@ $check = $conexao->prepare("SELECT * FROM usuario WHERE email = ?");
 $check->execute([$_POST['email']]);
 
 if ($check->rowCount() > 0) {
-    header("Location: ../tela/cadastro.php?status=erro&msg=" . urlencode("E-mail já cadastrado"));
+    header("Location: ../Tela/cadastro.php?status=erro&msg=" . urlencode("E-mail já cadastrado"));
     exit();
 }
 
@@ -39,19 +39,19 @@ if ($check->rowCount() > 0) {
 $stmt = $conexao->prepare("INSERT INTO usuario (nome, email, senha) VALUES (?, ?, ?)");
 
 if ($stmt->execute([$nome, $email, $senhavalida])) {
-    header("Location: ../tela/cadastro.php?status=sucesso&msg=" . urlencode("Cadastro feito com sucesso"));
+    header("Location: ../Tela/cadastro.php?status=sucesso&msg=" . urlencode("Cadastro feito com sucesso"));
 } else {
-    header("Location: ../tela/cadastro.php?status=erro&msg=" . urlencode("Erro ao cadastrar"));
+    header("Location: ../Tela/cadastro.php?status=erro&msg=" . urlencode("Erro ao cadastrar"));
 }
 }
 
   catch (PDOException $e) {
-    header("Location: ../tela/cadastro.php?status=erro&msg=" . urlencode("Erro interno do servidor"));
+    header("Location: ../Tela/cadastro.php?status=erro&msg=" . urlencode("Erro interno do servidor"));
     exit();
 }
 }
 else {
-    header("Location: ../tela/cadastro.php?status=erro&msg=" . urlencode("Preencha todos os campos"));
+    header("Location: ../Tela/cadastro.php?status=erro&msg=" . urlencode("Preencha todos os campos"));
 }
 exit();
 ?>

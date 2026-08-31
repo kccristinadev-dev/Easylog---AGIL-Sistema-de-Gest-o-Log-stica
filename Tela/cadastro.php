@@ -36,12 +36,12 @@ if (isset($_GET['status']) && isset($_GET['msg'])) {
         <label for="nome">Nome: 
             <input type="text" name="nome" required>
         </label>
-        <label for="nota1">Email:
-            <input type="text"name="email" required>
+        <label for="email">Email:
+            <input type="email" name="email" required>
         </label>
-        <label for="Descricao">Senha:
-            <input type="text" name="senha" required>
-        </label>       
+        <label for="senha">Senha:
+            <input type="password" name="senha" required>
+        </label>
 
         <button type="submit" name="botao-adicionar">    
             <i>Adicionar</i>

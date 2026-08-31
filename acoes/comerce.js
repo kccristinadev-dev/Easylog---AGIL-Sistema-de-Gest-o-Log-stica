@@ -125,44 +125,56 @@ const consumo = calcularConsumoMedio(produto);
 // MOSTRAR PRODUTOS
 // =====================
 
-function mostrarVitrineGeral() {
+function mostrarVitrineGeral(filtro = '') {
 
     const container = document.getElementById("lista-produtos");
 
-if (!container) return;
+    if (!container) return;
 
-container.innerHTML = "";
+    const termo = filtro.trim().toLowerCase();
+    const produtosFiltrados = !termo
+        ? produtos
+        : produtos.filter((produto) => {
+            const nome = (produto.nome || '').toLowerCase();
+            const descricao = (produto.detalhe || '').toLowerCase();
+            return nome.includes(termo) || descricao.includes(termo);
+        });
 
-if (produtos.length === 0) {
-    container.innerHTML = `
-        <div class="produtos">
-            <h2>Não há produtos cadastrados.</h2>
-            <p>Cadastre seus produtos na área administrativa.</p>
-        </div>
-    `;
-    return;
-}
+    container.innerHTML = "";
 
-    produtos.forEach((produto, index) => {
+    if (produtosFiltrados.length === 0) {
+        container.innerHTML = `
+            <div class="produtos produtos-vazio">
+                <h2>Nenhum produto encontrado.</h2>
+                <p>Experimente outro termo ou cadastre novos itens.</p>
+            </div>
+        `;
+        return;
+    }
+
+    produtosFiltrados.forEach((produto, index) => {
+        const produtoIndex = produtos.findIndex((item) => item.id === produto.id);
 
         const div = document.createElement("div");
-
         div.className = "produtos";
-
-        div.onclick = () => abrirDetalhe(index);
-
+        div.onclick = () => abrirDetalhe(produtoIndex >= 0 ? produtoIndex : index);
         div.innerHTML = `
+            <div class="produto-card-topo">
+                <span class="badge-disponibilidade">${Number(produto.estoque_fisico || 0)} un.</span>
+            </div>
             <h2>${produto.nome}</h2>
-            <p class="preco">
-              R$ ${Number(produto.preco).toFixed(2)}
-            </p>
-         <p>Disponível:
-               ${produto.estoque_fisico} un.
-            </p>
+            <p class="preco">R$ ${Number(produto.preco).toFixed(2)}</p>
+            <p class="info-produto">Disponível: ${produto.estoque_fisico ?? 0} un.</p>
         `;
 
         container.appendChild(div);
     });
+}
+
+function buscarCategorias() {
+    const input = document.getElementById('busca-categorias');
+    const termo = input ? input.value : '';
+    mostrarVitrineGeral(termo);
 }
 
 
@@ -268,35 +280,22 @@ function adicionarCarrinho(){
 
     if(!produtoAtual) return;
 
-
     const existente = carrinho.find(
         item => item.id == produtoAtual.id
     );
 
-
     if(existente){
-
         existente.quantidade += produtoAtual.quantidade;
-
-        atualizarEstoque(
-            produtoAtual.id,
-            produtoAtual.quantidade
-        );
-
-    }else{
-
+    } else {
         carrinho.push({
             ...produtoAtual,
             preco:Number(produtoAtual.preco)
         });
-
-
-
     }
 
-
     salvarCarrinho();
-
+    atualizarCarrinho();
+    mostrarElemento('carrinho');
     alert("Produto adicionado ao pedido!");
 
 }

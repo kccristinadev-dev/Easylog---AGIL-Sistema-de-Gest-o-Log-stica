@@ -27,19 +27,24 @@ $pagina = basename($_SERVER['PHP_SELF']);
     Início 
 </a>
 
-<a href="../tela/tabela.php" class="menu-btn <?= $pagina == 'tabela.php' ? 'ativo' : '' ?>">
+<a href="../Tela/tabela.php" class="menu-btn <?= $pagina == 'tabela.php' ? 'ativo' : '' ?>">
     Tabela
 </a>
 
-<a href="../tela/graficos.php" class="menu-btn <?= $pagina == 'graficos.php' ? 'ativo' : '' ?>">
+<a href="../Tela/graficos.php" class="menu-btn <?= $pagina == 'graficos.php' ? 'ativo' : '' ?>">
     Gráficos
 </a>
 
-<a href="../tela/relatorio.php" class="menu-btn <?= $pagina == 'relatorio.php' ? 'ativo' : '' ?>">
+<a href="../Tela/relatorio.php" class="menu-btn <?= $pagina == 'relatorio.php' ? 'ativo' : '' ?>">
     Relatório
 </a>
-<a href="../tela/Comercio.php" class="menu-btn <?= $pagina == 'Comercio.php' ? 'ativo' : '' ?>">
-produtos
+
+<a href="../Tela/Comercio.php" class="menu-btn <?= $pagina == 'Comercio.php' ? 'ativo' : '' ?>">
+    Produtos
+</a>
+
+<a href="../Tela/entregas.php" class="menu-btn <?= $pagina == 'entregas.php' ? 'ativo' : '' ?>">
+    Entregas
 </a>
 
 

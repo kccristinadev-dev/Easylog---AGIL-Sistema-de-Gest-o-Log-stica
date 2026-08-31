@@ -72,7 +72,7 @@ if (isset($_GET['status']) && isset($_GET['msg'])) {
 
 <p>
   Não tem conta?
-  <a href="tela/cadastro.php">Cadastre-se</a>
+  <a href="Tela/cadastro.php">Cadastre-se</a>
 </p>
 
 </div>

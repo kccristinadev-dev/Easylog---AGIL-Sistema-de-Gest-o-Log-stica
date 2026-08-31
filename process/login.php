@@ -10,7 +10,7 @@ if (!empty($_POST['email']) && !empty($_POST['senha'])) {
     $senha = $_POST['senha'];
     
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    header("Location: ../tela/cadastro.php?status=erro&msg=" . urlencode("Email inválido"));
+    header("Location: ../Tela/cadastro.php?status=erro&msg=" . urlencode("Email inválido"));
     exit();
 }
 
@@ -31,7 +31,7 @@ if ($_SESSION['usuario']['tipo_de_usuario'] === 'administrador') {
     header("Location: ../inicio.php");
     exit();
 } else {
-    header("Location: ../tela/Comercio.php");
+    header("Location: ../Tela/Comercio.php");
     exit();
 }
     } 
@@ -40,7 +40,7 @@ if ($_SESSION['usuario']['tipo_de_usuario'] === 'administrador') {
         exit();
     }
 } else {
-    header("Location: ../tela/cadastro.php?status=erro&msg=" . urlencode("Usuário inexistente, Cadastre-se"));
+    header("Location: ../Tela/cadastro.php?status=erro&msg=" . urlencode("Usuário inexistente, Cadastre-se"));
     exit();
 }
 } catch (PDOException $e) {
