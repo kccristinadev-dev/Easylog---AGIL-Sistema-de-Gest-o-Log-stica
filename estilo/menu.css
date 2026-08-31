@@ -1,0 +1,137 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+/* BASE */
+
+body{
+    font-family:Arial,sans-serif;
+    width:100%;
+    max-width:1200px;
+    margin:0 auto;
+    background:var(--cor-fundo);
+    color:var(--cor-texto);
+    overflow-y:visible;
+}
+
+/* MENU MOBILE */
+
+#menu{
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    gap:20px;
+
+    position:fixed;
+    left:0;
+    bottom:0;
+
+    width:100%;
+    height:70px;
+
+    padding:10px;
+
+    background:var(--cor-fundo);
+    border-top:1px solid var(--cor-borda);
+    box-shadow:0 -2px 10px var(--cor-borda);
+
+    z-index:2000;
+
+    overflow-x:auto;
+    overflow-y:hidden;
+}
+
+.menu-btn{
+    text-decoration: none;
+    color: inherit; /* ou uma cor, como #333 */
+    background:none;
+    border:none;
+    color:var(--cor-texto);
+    opacity:.6;
+    padding:8px 10px;
+    font-weight:bold;
+    cursor:pointer;
+}
+.menu-btn.ativo{
+    background: var(--cor-fundo);
+    color: var(--cor-primaria);
+    font-weight: bold;
+   box-shadow: 0 2px 8px var(--cor-borda);
+
+    border-radius: 8px;
+}
+
+.menu-btn:hover{
+    transition: .2s;
+    transform: translateY(-2px);
+}
+
+/* TABLET */
+
+@media (min-width:768px){
+
+    body{
+        padding-left:90px;
+    }
+
+    #menu{
+        top:0;
+        left:0;
+        bottom:0;
+
+        width:90px;
+        height:100vh;
+
+        flex-direction:column;
+        justify-content:flex-start;
+        gap:25px;
+
+        padding:25px 10px;
+
+        border-top:none;
+        border-right:1px solid var(--cor-borda);
+    }
+
+    #menu button{
+        width:100%;
+        border-radius:10px;
+        padding:12px;
+    }
+
+    #menu button:hover{
+        border-bottom:none;
+        border-left:4px solid var(--cor-primaria);
+        transform:none;
+    }
+}
+
+/* DESKTOP */
+
+@media (min-width:1200px){
+
+    body{
+        padding-left:240px;
+    }
+
+    #menu{
+        width:220px;
+        align-items:flex-start;
+        padding:30px 20px;
+        gap: 20px;
+        border-left: 2px solid var(--cor-borda);
+    }
+
+    #menu button{
+        width:100%;
+        text-align:left;
+        font-size:1rem;
+    }
+
+    #menu button p{
+        display:inline;
+        margin-left:10px;
+    }
+}

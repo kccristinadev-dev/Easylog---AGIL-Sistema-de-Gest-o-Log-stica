@@ -1,0 +1,274 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:var(--cor-fundo);
+    color:var(--cor-texto);
+}
+
+main{
+    width:100%;
+    min-width:200px;
+    margin:0 auto;
+    padding:8px;
+    align-items:center;
+    padding-bottom: 80px;
+}
+.mensagem{
+    position:fixed;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:9999;
+       width: 100%;
+    padding:14px 22px;
+
+    border-radius:12px;
+
+    background:var(--cor-fundo);
+    color:var(--cor-texto);
+    border:1px solid var(--cor-borda);
+
+    box-shadow:0 8px 20px rgba(0,0,0,.25);
+
+    animation:aparecer .3s ease;
+}
+
+@keyframes aparecer{
+    from{
+        opacity:0;
+        transform:translate(-50%,-20px);
+    }
+    to{
+        opacity:1;
+        transform:translate(-50%,0);
+    }
+}
+
+header{
+    width:100%;
+    padding:20px;
+    text-align:center;
+    margin-bottom:1rem;
+}
+
+header h2{
+    margin-top:5rem;
+    color:var(--cor-primaria);
+    font-size:1.5rem;
+}
+
+#informacoes{
+    position:fixed;
+    left:0;
+    bottom:0;
+
+    width:100%;
+    min-height:80vh;
+
+    display:grid;
+    grid-template-columns:repeat(2, 2fr);
+    gap:8px;
+
+padding:50px 20px 20px;
+padding-bottom: 90px; 
+
+      background:var(--cor-fundo);
+    border-radius:20px 20px 0 0;
+    border-top:1px solid var(--cor-borda);
+
+    overflow-y:auto;
+
+    transform:translateY(100%);
+    transition:transform .35s ease;
+
+    z-index:1000;
+}
+#informacoes h3 {
+            padding-top: 20px 10px;
+    color:var(--cor-primaria);
+
+        text-align: center;
+
+}
+#informacoes.abrir{
+
+    transform:translateY(0);
+}
+#overlay{
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,.75);
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:.3s;
+
+    z-index:999;
+}
+
+#overlay.abrir{
+    opacity:1;
+    visibility:visible;
+}
+.fechar{
+    position:absolute;
+    top:15px;
+    left:15px;
+
+    border:none;
+    background:none;
+    color:var(--cor-texto);
+    font-size:24px;
+    cursor:pointer;
+}
+.campo{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+
+.campo label{
+    font-size:.85rem;
+    color:var(--cor-texto);
+}
+
+.campo input{
+    width:100%;
+    padding:15px 10px;
+    font-size:.95rem;
+    border-radius:8px;
+    border:1px solid var(--cor-borda);
+    background:rgba(255,255,255,.08);
+    color:var(--cor-texto);
+    outline:none;
+}
+
+.campo input:focus{
+    border-color:var(--cor-primaria);
+}
+
+.alinhar{
+    grid-column:span 2;
+    display:flex;
+    gap:10px;
+}
+
+select{
+    flex:1;
+    padding:10px;
+    border-radius:8px;
+    border:1px solid var(--cor-borda);
+    background:rgba(255,255,255,.08);
+    color:var(--cor-texto);
+}
+
+#calcular{
+    flex:1;
+    padding:10px;
+    border-radius:8px;
+    border:none;
+    background:var(--cor-primaria);
+    color:var(--cor-texto);
+    font-weight:bold;
+    cursor:pointer;
+    transition:.2s;
+}
+
+#calcular:hover{
+    transform:scale(1.02);
+}
+
+#calcular:active{
+    transform:scale(.97);
+}
+
+/* CARDS */
+
+.opcoes{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:20px;
+    flex-wrap:wrap;
+    margin-top:30px;
+}
+
+.card-opcao{
+    width:280px;
+    min-height:180px;
+    padding:20px;
+    border:1px solid var(--cor-borda);
+    border-radius:16px;
+    background:rgba(255,255,255,.06);
+    text-decoration:none;
+    color:var(--cor-texto);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    transition:.25s;
+}
+
+.card-opcao:hover{
+    transform:translateY(-5px);
+    border-color:var(--cor-primaria);
+    box-shadow:0 5px 15px rgba(0,0,0,.3);
+}
+
+.card-opcao:active{
+    transform:scale(.97);
+}
+
+.icone{
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    background:var(--cor-primaria);
+    color:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:42px;
+    font-weight:bold;
+}
+
+.card-opcao h3{
+    text-align:center;
+    font-size:1.1rem;
+}
+
+.card-opcao p{
+    text-align:center;
+    font-size:.9rem;
+    opacity:.8;
+}
+
+@media (max-width:768px){
+
+    .opcoes{
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .card-opcao{
+        width:95%;
+    }
+
+    #informacoes{
+        grid-template-columns:1fr;
+    }
+
+    .alinhar{
+        grid-column:span 1;
+    }
+}

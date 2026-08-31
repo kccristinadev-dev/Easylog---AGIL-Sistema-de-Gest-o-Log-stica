@@ -1,0 +1,157 @@
+/* RESET */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+/* BODY */
+body{
+    font-family:Arial, sans-serif;
+    background:#1b1b1b;
+    color:#f1f1f1;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+flex-direction: column;
+    min-height:100vh;
+}
+
+/* FORMULÁRIO */
+.container-form{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    padding: 10px;
+}
+
+form{
+    width:100%;
+    min-width: 200px;
+
+    background:#242424;
+    padding:35px 30px;
+
+    border-radius:18px;
+    box-shadow:0 8px 20px rgba(0,0,0,.45);
+
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+}
+
+/* TÍTULO */
+form h2{
+    text-align:center;
+    color:#800af0;
+    font-size:1.8rem;
+    margin-bottom:10px;
+}
+
+/* LABELS */
+label{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+
+    font-weight:bold;
+    color:#d9d9d9;
+}
+
+/* INPUTS */
+input{
+    width:100%;
+
+    padding: 15px 10px;
+
+    border-radius:8px;
+border:1px solid rgba(0,0,0,0.4);
+
+background: rgba(255,255,255,0.08);
+    color:#fff;
+
+    transition:.25s;
+}
+
+input:focus{
+    outline:none;
+    border-color:#9b4dff;
+    box-shadow:0 0 8px rgba(155,77,255,.35);
+}
+
+/* BOTÃO */
+button{
+    margin-top:10px;
+
+    padding:13px;
+
+    border:none;
+    border-radius:8px;
+
+    background:#6f1dff;
+    color:#fff;
+
+    font-size:1rem;
+    font-weight:bold;
+
+    cursor:pointer;
+    transition:.25s;
+}
+
+button:hover{
+    background:#8844ff;
+}
+
+button:active{
+    transform:scale(.98);
+}
+
+/* BOTÃO VOLTAR */
+.voltar-Pinicio{
+
+    width:200px;
+    height:35px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    color:#800af0;
+
+    border-radius: 30px;
+    background: transparent;
+
+    transition:.25s;
+}
+
+.voltar-Pinicio:hover{
+    background:#8844ff;
+}
+
+/* MENSAGEM */
+.mensagem{
+    position:fixed;
+
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+
+    padding:12px 20px;
+
+    border-radius:10px;
+
+    color:#fff;
+    font-weight:bold;
+
+    z-index:9999;
+}
+
+.mensagem.sucesso{
+    background:#28a745;
+}
+
+.mensagem.erro{
+    background:#dc3545;
+}

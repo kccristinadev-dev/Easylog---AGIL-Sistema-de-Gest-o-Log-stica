@@ -1,0 +1,156 @@
+/* RESET */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+canvas{
+    max-width:100%;
+    height:auto;
+}
+
+/* BODY */
+body{
+    font-family:Arial,sans-serif;
+    background:var(--cor-fundo);
+    color:var(--cor-texto);
+}
+
+/* HEADER */
+header{
+    width:100%;
+    padding:20px;
+    text-align:center;
+    margin-bottom:2rem;
+}
+
+header h2{
+    margin-top:5rem;
+    font-size:1.5rem;
+    color:var(--cor-primaria);
+}
+
+header p{
+    color:var(--cor-texto);
+    opacity:.8;
+}
+
+.resumo{
+    width: 100%;
+    background: var(--cor-fundo);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px var(--cor-borda);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.resumo p{
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--cor-texto);
+}
+
+.resumo span{
+    color: var(--cor-primaria);
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+/* CONTAINER DOS GRÁFICOS */
+#graficos{
+    width:100%;
+    max-width:1200px;
+    margin:0 auto;
+    padding:15px;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:20px;
+    padding-bottom:80px;
+}
+
+/* CARD */
+.grafico-box{
+    background:var(--cor-fundo);
+    border:1px solid var(--cor-borda);
+    border-radius:20px;
+    padding:15px;
+    box-shadow:0 4px 12px var(--cor-borda);
+}
+
+.grafico-box h4{
+    text-align:center;
+    margin-bottom:15px;
+    color:var(--cor-primaria);
+}
+
+/* ÁREA DE SCROLL */
+.grafico-scroll{
+    width:100%;
+    max-height:350px;
+    overflow-x:auto;
+    overflow-y:hidden;
+}
+
+/* CANVAS */
+.grafico-scroll canvas{
+    display:block;
+    width:100%;
+    min-width:200px;
+    max-height:250px;
+    height:auto;
+}
+
+/* SCROLL */
+.grafico-scroll::-webkit-scrollbar{
+    height:8px;
+}
+
+.grafico-scroll::-webkit-scrollbar-thumb{
+    background:var(--cor-primaria);
+    border-radius:10px;
+}
+
+.grafico-scroll::-webkit-scrollbar-track{
+    background:var(--cor-borda);
+}
+
+/* TABLET */
+@media (min-width:768px){
+
+    #graficos{
+        grid-template-columns:1fr 1fr;
+    }
+
+    #menu{
+        top:55px;
+        bottom:auto;
+    }
+
+    main{
+        padding-bottom:80px;
+    }
+
+    .grafico-box{
+        max-height:350px;
+    }
+}
+
+/* DESKTOP */
+@media (min-width:1200px){
+
+    #graficos{
+        grid-template-columns:1fr 1fr;
+    }
+
+    header{
+        margin-top:2rem;
+    }
+}

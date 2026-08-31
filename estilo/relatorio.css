@@ -1,0 +1,143 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+body{
+    font-family:Arial,sans-serif;
+    max-width:1200px;
+    margin:0 auto;
+    background:var(--cor-fundo);
+    color:var(--cor-texto);
+}
+
+/* HEADER */
+
+header{
+    text-align:center;
+    padding:25px 10px;
+}
+
+header h2{
+    margin-top:40px;
+    font-size:1.6rem;
+    color:var(--cor-primaria);
+}
+
+/* MAIN */
+
+main{
+    padding:10px;
+    padding-bottom:80px;
+}
+
+/* RELATÓRIO */
+
+#relatorio{
+    width:100%;
+}
+
+#relatorio h1{
+    text-align:center;
+    margin-bottom:20px;
+    color:var(--cor-texto);
+}
+
+/* BLOCOS */
+
+.container-relatorioN{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    margin-bottom:30px;
+    padding:15px;
+    border-radius:12px;
+    border:1px solid var(--cor-borda);
+    background:var(--cor-fundo);
+    box-shadow:0 4px 12px var(--cor-borda);
+}
+
+/* TÍTULOS */
+
+.container-relatorioN h2{
+    margin-bottom:15px;
+    text-align:center;
+    color:var(--cor-primaria);
+}
+
+/* COLUNAS */
+
+.container-coluna{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    min-height:250px;
+    max-height:270px;
+    overflow-x:auto;
+    padding:5px 5px 10px;
+}
+
+/* CARDS */
+
+.coluna{
+    flex:0 0 auto;
+    min-width:240px;
+    max-height:250px;
+    overflow-x:auto;
+    padding:12px;
+    border-radius:10px;
+    background:var(--cor-fundo);
+    border:1px solid var(--cor-borda);
+    box-shadow:0 2px 8px var(--cor-borda);
+    transition:.2s ease;
+}
+
+.coluna:hover{
+    transform:translateY(-3px);
+}
+
+.coluna h3{
+    margin-bottom:10px;
+    text-align:center;
+    font-size:1rem;
+    color:var(--cor-primaria);
+}
+
+.coluna p{
+    padding:8px;
+    margin-bottom:8px;
+    font-size:.9rem;
+    border:1px solid var(--cor-borda);
+    border-radius:8px;
+    color:var(--cor-texto);
+}
+
+/* SCROLL */
+
+.container-coluna::-webkit-scrollbar{
+    height:6px;
+}
+
+.container-coluna::-webkit-scrollbar-thumb{
+    background:var(--cor-primaria);
+    border-radius:10px;
+}
+
+.container-coluna::-webkit-scrollbar-track{
+    background:var(--cor-borda);
+}
+button {
+    padding 10px 20px;
+}
+
+@media (min-width:1200px){
+    main {
+        padding-bottom: 20px;
+        padding-left:240px;
+   
+    }
+    .container-coluna{
+        width: 100%;
+    }
+}
