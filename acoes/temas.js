@@ -49,6 +49,11 @@ function alternarModo() {
     atualizarTema();
 }
 
+const botaoTema = document.getElementById("theme-toggle");
+if (botaoTema) {
+    botaoTema.addEventListener("click", alternarModo);
+}
+
 function trocarTema(nome) {
     if (temas[nome]) {
         configuracao.tema = nome;

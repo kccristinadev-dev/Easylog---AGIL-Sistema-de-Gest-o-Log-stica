@@ -19,6 +19,25 @@ CREATE TABLE IF NOT EXISTS entregas (
     CONSTRAINT fk_entregas_usuario FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS pedidos (
+    id INT NOT NULL AUTO_INCREMENT,
+    id_produto INT NOT NULL,
+    id_usuario INT NOT NULL,
+    quantidade INT NOT NULL,
+    data DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('Pendente', 'Em preparação', 'Em transporte', 'Entregue', 'Cancelada') NOT NULL DEFAULT 'Pendente',
+    codigo_pedido VARCHAR(80) NULL,
+    endereco_entrega VARCHAR(255) NULL,
+    telefone VARCHAR(30) NULL,
+    observacoes_entrega TEXT NULL,
+    PRIMARY KEY (id),
+    KEY idx_pedidos_produto (id_produto),
+    KEY idx_pedidos_usuario (id_usuario),
+    KEY idx_pedidos_codigo (codigo_pedido),
+    CONSTRAINT fk_pedidos_produto FOREIGN KEY (id_produto) REFERENCES produtos(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_pedidos_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Exemplo de consulta para listar entregas por usuário e sugerir rota:
 -- SELECT id, cliente, endereco, status, data_prevista, latitude, longitude
 -- FROM entregas

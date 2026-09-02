@@ -307,7 +307,7 @@ function removerItem(nome){
     );
 
     salvarCarrinho();
-atualizarEstoque();
+    atualizarCarrinho();
 }
 
 
@@ -432,18 +432,40 @@ function atualizarCarrinho(){
 // =====================
 // INICIALIZAÇÃO
 // =====================
-function atualizarEstoque(){
+function atualizarCompra(){
 
-    fetch("../tela/Comercio.php", {
+    if (carrinho.length === 0) {
+        alert("Adicione pelo menos um produto ao pedido.");
+        return;
+    }
+    const endereco = document.getElementById("endereco-entrega").value.trim();
+    if (!endereco) {
+        alert("Informe o endereço de entrega.");
+        return;
+    }
+
+    fetch("../process/atualizarvenda.php", {
         method:"POST",
         headers:{
             "Content-Type":"application/json"
         },
-        body: JSON.stringify(carrinho)
+        body: JSON.stringify({
+            itens: carrinho,
+            endereco,
+            telefone: document.getElementById("telefone-entrega").value.trim(),
+            observacoes: document.getElementById("observacoes-entrega").value.trim()
+        })
     })
     .then(res => res.text())
     .then(dados => {
-        console.log(dados);
+        alert(dados);
+        if (dados === "Atualizado") {
+            carrinho = [];
+            salvarCarrinho();
+            document.getElementById("endereco-entrega").value = "";
+            document.getElementById("telefone-entrega").value = "";
+            document.getElementById("observacoes-entrega").value = "";
+        }
     })
     .catch(erro => {
         console.error(erro);
@@ -451,24 +473,23 @@ function atualizarEstoque(){
     
 }
 
-
-function atualizarCompra(){
-
-    fetch("../process/atualizarvenda.php", {
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
-        },
-        body: JSON.stringify(carrinho)
-    })
-    .then(res => res.text())
-    .then(dados => {
-        console.log(dados);
-    })
-    .catch(erro => {
-        console.error(erro);
-    });
-    
+async function carregarPedidos() {
+    const resposta = await fetch("../process/pedidos.php");
+    const json = await resposta.json();
+    const lista = document.getElementById("lista-pedidos");
+    if (!lista) return;
+    if (!json.success || json.dados.length === 0) {
+        lista.innerHTML = "<p>Nenhum pedido encontrado.</p>";
+        return;
+    }
+    lista.innerHTML = json.dados.map(pedido => `
+        <article class="pedido-status">
+            <strong>${pedido.codigo_pedido || "Pedido #" + pedido.id}</strong>
+            <span>${pedido.produto} (${pedido.quantidade} un.)</span>
+            <b>${pedido.status}</b>
+            <small>${pedido.endereco_entrega || "Endereço não informado"}</small>
+        </article>
+    `).join("");
 }
 
 
@@ -477,5 +498,6 @@ window.addEventListener("load", ()=>{
     mostrarVitrineGeral();
 
     atualizarCarrinho();
+    carregarPedidos();
 
 });

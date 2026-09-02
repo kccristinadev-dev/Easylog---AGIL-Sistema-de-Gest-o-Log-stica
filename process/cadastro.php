@@ -12,7 +12,8 @@ include 'conexao.php';
 if (
    !empty($_POST['nome']) &&
     !empty($_POST['email']) &&
-    !empty($_POST['senha']) 
+    !empty($_POST['senha']) &&
+    in_array($_POST['tipo_de_usuario'] ?? '', ['cliente', 'administrador'], true)
 )
 {
     $nome = trim($_POST['nome']);
@@ -36,9 +37,9 @@ if ($check->rowCount() > 0) {
 
 
 
-$stmt = $conexao->prepare("INSERT INTO usuario (nome, email, senha) VALUES (?, ?, ?)");
+$stmt = $conexao->prepare("INSERT INTO usuario (nome, email, senha, tipo_de_usuario) VALUES (?, ?, ?, ?)");
 
-if ($stmt->execute([$nome, $email, $senhavalida])) {
+if ($stmt->execute([$nome, $email, $senhavalida, $_POST['tipo_de_usuario']])) {
     header("Location: ../Tela/cadastro.php?status=sucesso&msg=" . urlencode("Cadastro feito com sucesso"));
 } else {
     header("Location: ../Tela/cadastro.php?status=erro&msg=" . urlencode("Erro ao cadastrar"));

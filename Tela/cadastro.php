@@ -42,6 +42,12 @@ if (isset($_GET['status']) && isset($_GET['msg'])) {
         <label for="senha">Senha:
             <input type="password" name="senha" required>
         </label>
+        <label for="tipo_de_usuario">Tipo de conta:
+            <select name="tipo_de_usuario" id="tipo_de_usuario" required>
+                <option value="cliente">Cliente</option>
+                <option value="administrador">Administrador</option>
+            </select>
+        </label>
 
         <button type="submit" name="botao-adicionar">    
             <i>Adicionar</i>

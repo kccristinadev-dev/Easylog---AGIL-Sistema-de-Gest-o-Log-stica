@@ -70,8 +70,8 @@ if (!isset($_SESSION['usuario']['id'])) {
         const produtos = <?= json_encode($resultado) ?>;
     </script>
 
-    <script src="../acoes/graficos.js"></script>
     <script src="../acoes/temas.js"></script>
+    <script src="../acoes/graficos.js"></script>
 
 </body>
 </html>

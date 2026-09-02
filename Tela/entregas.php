@@ -128,6 +128,18 @@ if ($conexao) {
             </table>
         </div>
     </section>
+
+    <section class="painel painel-lista">
+        <div class="lista-header">
+            <h2>Pedidos dos clientes</h2>
+        </div>
+        <div class="tabela-container">
+            <table>
+                <thead><tr><th>Pedido</th><th>Cliente</th><th>Produto</th><th>Entrega</th><th>Status</th></tr></thead>
+                <tbody id="tbody-pedidos"></tbody>
+            </table>
+        </div>
+    </section>
 </main>
 
 <script>
@@ -186,6 +198,39 @@ async function carregarEntregas() {
     });
 
     carregarRota();
+}
+
+async function carregarPedidos() {
+    const resposta = await fetch('../process/pedidos.php');
+    const json = await resposta.json();
+    const tbody = document.getElementById('tbody-pedidos');
+    if (!json.success || json.dados.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5">Nenhum pedido recebido.</td></tr>';
+        return;
+    }
+    tbody.innerHTML = json.dados.map((pedido) => `
+        <tr>
+            <td>${escHtml(pedido.codigo_pedido || '#' + pedido.id)}</td>
+            <td>${escHtml(pedido.cliente_nome || 'Cliente')}</td>
+            <td>${escHtml(pedido.produto)} (${pedido.quantidade})</td>
+            <td>${escHtml(pedido.endereco_entrega || 'Não informado')}</td>
+            <td><select data-pedido-status="${pedido.id}" data-pedido-codigo="${escHtml(pedido.codigo_pedido || '')}">
+                ${['Pendente', 'Em preparação', 'Em transporte', 'Entregue', 'Cancelada'].map(status => `<option ${status === pedido.status ? 'selected' : ''}>${status}</option>`).join('')}
+            </select></td>
+        </tr>`).join('');
+    tbody.querySelectorAll('[data-pedido-status]').forEach((select) => {
+        select.addEventListener('change', () => atualizarPedido(select.dataset.pedidoStatus, select.dataset.pedidoCodigo, select.value));
+    });
+}
+
+async function atualizarPedido(id, codigo, status) {
+    const resposta = await fetch('../process/pedidos.php', {
+        method: 'PATCH',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({id, codigo_pedido: codigo, status})
+    });
+    const json = await resposta.json();
+    if (!json.success) alert(json.message || 'Não foi possível atualizar o pedido.');
 }
 
 async function carregarRota() {
@@ -283,6 +328,7 @@ function slug(value) {
 
 document.getElementById('form-entrega').addEventListener('submit', salvarEntrega);
 carregarEntregas();
+carregarPedidos();
 </script>
 </body>
 </html>

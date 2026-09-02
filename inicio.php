@@ -35,9 +35,9 @@ if (!isset($_SESSION['usuario']['id'])) {
         <h3>Adicionar Produto</h3>
     </div>
 
-    <div class="card-opcao" onclick="abrirFormulario('admin')">
+    <div class="card-opcao" onclick="gerarAcessoClientes()">
         <div class="icone">+</div>
-        <h3>Adicionar Administrador</h3>
+        <h3>Acesso de clientes</h3>
     </div>
 
 </div>
@@ -121,6 +121,15 @@ if (!isset($_SESSION['usuario']['id'])) {
 
 </main>
 <script>
+function gerarAcessoClientes(){
+    const link = new URL('Tela/Comercio.php', window.location.href).href;
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(link).then(() => alert(`Link copiado: ${link}`));
+    } else {
+        window.prompt('Copie o link da área de clientes:', link);
+    }
+}
+
    function abrirFormulario(tipo){
 
     const produto = document.getElementById("informacoes");

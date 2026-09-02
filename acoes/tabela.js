@@ -38,6 +38,51 @@ function voltar() {
 
 }
 
+let produtoEmEdicao = null;
+
+function editar(index) {
+  produtoEmEdicao = produtos[index];
+  document.getElementById('noproduto').value = produtoEmEdicao.produto;
+  document.getElementById('esFisico').value = produtoEmEdicao.estoqueFisico;
+  document.getElementById('esvirtual').value = produtoEmEdicao.estoqueVirtual;
+  document.getElementById('TotalDevendas').value = produtoEmEdicao.vendaTotal;
+  document.getElementById('tempo').value = produtoEmEdicao.tempoRepo;
+  document.getElementById('totalPedido').value = produtoEmEdicao.totalPedidos;
+  document.getElementById('editarFor').style.display = "block";
+}
+
+async function salvarEdicao() {
+  if (!produtoEmEdicao) return;
+  const resposta = await fetch('../process/editarProduto.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      id: produtoEmEdicao.id,
+      nome: document.getElementById('noproduto').value,
+      estoque_fisico: document.getElementById('esFisico').value,
+      estoque_virtual: document.getElementById('esvirtual').value,
+      total_vendas: document.getElementById('TotalDevendas').value,
+      tempo_reposicao: document.getElementById('tempo').value,
+      total_pedidos: document.getElementById('totalPedido').value
+    })
+  });
+  const resultado = await resposta.json();
+  if (!resultado.success) {
+    alert(resultado.message || 'Não foi possível editar o produto.');
+    return;
+  }
+  Object.assign(produtoEmEdicao, {
+    produto: document.getElementById('noproduto').value,
+    estoqueFisico: Number(document.getElementById('esFisico').value),
+    estoqueVirtual: Number(document.getElementById('esvirtual').value),
+    vendaTotal: Number(document.getElementById('TotalDevendas').value),
+    tempoRepo: Number(document.getElementById('tempo').value),
+    totalPedidos: Number(document.getElementById('totalPedido').value)
+  });
+  voltar();
+  mostrarTabela();
+}
+
 
 function excluirItem(index) {
     console.log("Entrou na função excluir");

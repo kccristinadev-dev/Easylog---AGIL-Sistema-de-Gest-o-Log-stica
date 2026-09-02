@@ -79,9 +79,12 @@ catch (Exception $e) {
 $idUsuario = $_SESSION['usuario']['id'];
 
 
-$stmt = $conexao->prepare("SELECT * FROM produtos WHERE usuario_id = :id");
-
-$stmt->execute([ ":id" => $idUsuario]);
+$tipoUsuario = $_SESSION['usuario']['tipo_de_usuario'] ?? 'cliente';
+$sqlProdutos = $tipoUsuario === 'administrador'
+  ? "SELECT p.* FROM produtos p WHERE p.usuario_id = :id"
+  : "SELECT p.* FROM produtos p INNER JOIN usuario u ON u.id = p.usuario_id WHERE u.tipo_de_usuario = 'administrador' ORDER BY p.nome";
+$stmt = $conexao->prepare($sqlProdutos);
+$stmt->execute([":id" => $idUsuario]);
 
 $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -119,6 +122,11 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <h2 class="titulo-secao">Produtos</h2>
     <div class="lista-produtos" id="lista-produtos"></div>
 
+  </section>
+
+  <section id="acompanhar" class="tela" aria-label="Acompanhamento de pedidos">
+    <h2>Meus pedidos</h2>
+    <div id="lista-pedidos"></div>
   </section>
 
   <!-- DETALHE DO PRODUTO -->
@@ -161,6 +169,12 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <ol class="carrinho-de-produtos"></ol>
 
       <p id="totalgeral"></p>
+      <div class="dados-entrega">
+        <h3>Dados para entrega</h3>
+        <input id="endereco-entrega" type="text" placeholder="Endereço completo" required>
+        <input id="telefone-entrega" type="tel" placeholder="Telefone">
+        <textarea id="observacoes-entrega" placeholder="Observações"></textarea>
+      </div>
 <br>
       <button id="comprar" onclick="atualizarCompra()"
       >
@@ -177,6 +191,7 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <nav id="menu" aria-label="Menu principal">
   <button onclick="mostrarElemento('categorias')">Produtos</button>
   <button onclick="mostrarElemento('carrinho')">Pedidos</button>
+  <button onclick="mostrarElemento('acompanhar'); carregarPedidos()">Acompanhar</button>
 <button onclick="window.location.href='../inicio.php'">
     Administração
 </button>

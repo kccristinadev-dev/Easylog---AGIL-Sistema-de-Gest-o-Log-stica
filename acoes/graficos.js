@@ -12,8 +12,8 @@ function cor(nome){
         .trim();
 }
 
-const corTexto = cor("--cor-texto");
-const corPrimaria = cor("--cor-primaria");
+const corTexto = cor("--cor-texto") || "#1F2937";
+const corPrimaria = cor("--cor-primaria") || "#5B21B6";
 
 function nivelRuptura(item, ruptura) {
     if (ruptura <= 10) return "Bom";
@@ -23,7 +23,7 @@ function nivelRuptura(item, ruptura) {
 
 function nivelDeConsumoM(item, consumoM) {
 
-    const estoqueTotal = item.estoqueFisico + item.estoqueVirtual;
+    const estoqueTotal = Number(item.estoqueFisico) + Number(item.estoqueVirtual);
 
     if (consumoM === 0) return "Ruim";
 
@@ -102,8 +102,7 @@ if (!canvas) return;
         ctx.fillStyle = corTexto;
         ctx.fillText(valor.toFixed(0), x + larguraBarra/2, ytopo-5);
 
-corTexto = "var(--cor-primaria)";
-ctx.fillStyle = corTexto;  
+ctx.fillStyle = corPrimaria;
 ctx.fillText(produtos[i].produto, x + larguraBarra/2, 270);
     });
 }
@@ -175,8 +174,7 @@ else {
         ctx.fillStyle = corTexto;
         ctx.fillText(valor.toFixed(0), x + larguraBarra/2, ytopo-5);
 
-corTexto = "var(--cor-primaria)";
-ctx.fillStyle = corTexto;
+ctx.fillStyle = corPrimaria;
 ctx.fillText(produtos[i].produto, x + larguraBarra/2, 270);
 
 
@@ -245,7 +243,7 @@ const cobertura = item.cobertura;
         ctx.fillStyle = corTexto;
         ctx.fillText(valor.toFixed(0), x + larguraBarra/2, ytopo-5);
 
-ctx.fillStyle = corTexto;
+ctx.fillStyle = corPrimaria;
 ctx.fillText(produtos[i].produto, x+ larguraBarra/2, 270);
 
 
@@ -329,8 +327,7 @@ return valorRuptura;
         ctx.fillStyle = corTexto;
         ctx.fillText(valor.toFixed(0)+ "%", x + larguraBarra/2, ytopo-5);
 
-corTexto = "var(--cor-primaria)";
-ctx.fillStyle = corTexto;
+ctx.fillStyle = corPrimaria;
 ctx.fillText(produtos[i].produto, x + larguraBarra/2, 270);
     });
 }
