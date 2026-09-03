@@ -1,53 +1,134 @@
 <?php
 session_start();
-include "../process/conexao.php";
+include "conexao.php";
 
 if (!isset($_SESSION['usuario']['id'])) {
     header("Location: ../index.php");
     exit;
 }
 
-
-// Recebe compra
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
-    $dados = json_decode(file_get_contents("php://input"), true);
-
-        $endereco = trim((string) ($dados['endereco'] ?? ''));
-        $itens = is_array($dados) ? ($dados['itens'] ?? []) : [];
-        if (!$itens || $endereco === '') {
-            http_response_code(400);
-            echo "Informe o endereço e adicione produtos ao pedido.";
-            exit;
-        }
-
-        $conexao->beginTransaction();
-        try {
-            $codigo = 'PED-' . date('YmdHis') . '-' . $_SESSION['usuario']['id'];
-            $stmtPedido = $conexao->prepare("INSERT INTO pedidos (id_produto, id_usuario, quantidade, status, codigo_pedido, endereco_entrega, telefone, observacoes_entrega) VALUES (?, ?, ?, 'Pendente', ?, ?, ?, ?)");
-
-        foreach ($itens as $produto) {
-
-        $sql = "UPDATE produtos p INNER JOIN usuario u ON u.id = p.usuario_id SET p.total_pedidos = p.total_pedidos + :quantidade, p.estoque_fisico = p.estoque_fisico - :quantidade WHERE p.id = :id AND u.tipo_de_usuario = 'administrador' AND p.estoque_fisico >= :quantidade";
-        $stmt = $conexao->prepare($sql);
-
-        $stmt->execute([
-            ":quantidade" => $produto["quantidade"],
-            ":id" => $produto["id"]
-        ]);
-        if ($stmt->rowCount() !== 1) {
-            throw new RuntimeException('Estoque insuficiente.');
-        }
-        $stmtPedido->execute([$produto["id"], $_SESSION['usuario']['id'], $produto["quantidade"], $codigo, $endereco, trim((string) ($dados['telefone'] ?? '')), trim((string) ($dados['observacoes'] ?? ''))]);
-    }
-
-    $conexao->commit();
-    echo "Atualizado";
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    http_response_code(405);
+    echo "Método não permitido.";
     exit;
-    } catch (Throwable $e) {
-        if ($conexao->inTransaction()) $conexao->rollBack();
-        http_response_code(500);
-        echo "Não foi possível finalizar o pedido.";
-        exit;
+}
+
+$dados = json_decode(file_get_contents("php://input"), true);
+
+if (!is_array($dados)) {
+    http_response_code(400);
+    echo "Dados inválidos.";
+    exit;
+}
+
+$endereco = trim((string) ($dados['endereco'] ?? ''));
+$telefone = trim((string) ($dados['telefone'] ?? ''));
+$observacoes = trim((string) ($dados['observacoes'] ?? ''));
+$itens = $dados['itens'] ?? [];
+
+if ($endereco === '' || !is_array($itens) || empty($itens)) {
+    http_response_code(400);
+    echo "Informe o endereço e adicione produtos ao pedido.";
+    exit;
+}
+
+try {
+
+    $codigo = 'PED-' . date('YmdHis') . '-' . $_SESSION['usuario']['id'];
+
+    /*
+     * Cadastra cada item do pedido.
+     */
+    $stmtPedido = $conexao->prepare("
+        INSERT INTO pedidos
+        (
+            id_produto,
+            id_usuario,
+            quantidade,
+            status,
+            codigo_pedido,
+            endereco_entrega,
+            telefone,
+            observacoes_entrega
+        )
+        VALUES (?, ?, ?, 'Pendente', ?, ?, ?, ?)
+    ");
+
+    /*
+     * Atualiza o estoque e o total de pedidos.
+     *
+     * Os parâmetros q1, q2 e q3 são separados
+     * para evitar o erro de "Invalid parameter number"
+     * causado pela repetição do mesmo parâmetro nomeado.
+     */
+    $stmtEstoque = $conexao->prepare("
+        UPDATE produtos p
+        INNER JOIN usuario u ON u.id = p.usuario_id
+        SET
+            p.total_pedidos = p.total_pedidos + :q1,
+            p.estoque_fisico = p.estoque_fisico - :q2
+        WHERE
+            p.id = :id
+            AND u.tipo_de_usuario = 'administrador'
+            AND p.estoque_fisico >= :q3
+    ");
+
+    foreach ($itens as $produto) {
+
+        $idProduto = (int) ($produto['id'] ?? 0);
+        $quantidade = (int) ($produto['quantidade'] ?? 0);
+
+        if ($idProduto <= 0 || $quantidade <= 0) {
+            throw new RuntimeException(
+                "Produto inválido. ID: " .
+                ($produto['id'] ?? 'não informado') .
+                " | Quantidade: " .
+                ($produto['quantidade'] ?? 'não informada')
+            );
+        }
+
+        /*
+         * Atualiza o estoque.
+         */
+        $stmtEstoque->execute([
+            ":q1" => $quantidade,
+            ":q2" => $quantidade,
+            ":id" => $idProduto,
+            ":q3" => $quantidade
+        ]);
+
+        if ($stmtEstoque->rowCount() !== 1) {
+            throw new RuntimeException(
+                "Estoque insuficiente ou produto não encontrado. " .
+                "ID: " . $idProduto
+            );
+        }
+
+        /*
+         * Registra o pedido.
+         */
+        $stmtPedido->execute([
+            $idProduto,
+            $_SESSION['usuario']['id'],
+            $quantidade,
+            $codigo,
+            $endereco,
+            $telefone,
+            $observacoes
+        ]);
     }
+
+    echo "Pedido realizado com sucesso.";
+    exit;
+
+} catch (Throwable $e) {
+
+    http_response_code(500);
+
+    echo "ERRO: " .
+        get_class($e) .
+        " | " .
+        $e->getMessage();
+
+    exit;
 }
