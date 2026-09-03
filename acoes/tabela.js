@@ -13,9 +13,27 @@ grafico.innerHTML = `
 return;
     }
 
-    produtos.forEach((item, index) => {
+    const termo = (document.getElementById('pesquisa-produto')?.value || '').toLowerCase();
+    const periodo = document.getElementById('filtro-periodo')?.value || 'todos';
+    const produtosVisiveis = produtos.filter(item => {
+      const nomeCorresponde = String(item.produto).toLowerCase().includes(termo);
+      const periodoCorresponde = periodo === 'todos' || item.periodo === periodo;
+      return nomeCorresponde && periodoCorresponde;
+    });
+
+    if (produtosVisiveis.length === 0) {
+      grafico.innerHTML = '<tr><td colspan="7">Nenhum produto encontrado.</td></tr>';
+      return;
+    }
+
+    produtosVisiveis.forEach((item) => {
+      const index = produtos.indexOf(item);
+      const estoqueTotal = Number(item.estoqueFisico) + Number(item.estoqueVirtual);
+      const classeEstoque = estoqueTotal === 0 ? 'estoque-zerado' : (estoqueTotal <= Number(item.tempoRepo) ? 'estoque-baixo' : '');
 
         const linha = document.createElement("tr");
+      linha.className = classeEstoque;
+      linha.title = estoqueTotal === 0 ? 'Estoque zerado' : (classeEstoque ? 'Estoque baixo: reposição necessária' : 'Estoque normal');
 
         linha.innerHTML = `
             <td>${item.produto}</td>
@@ -31,6 +49,10 @@ return;
         grafico.appendChild(linha);
     });
 
+}
+
+function filtrarTabela() {
+  mostrarTabela();
 }
 //fechar o formulario de editar se mudar o valor
 function voltar() {

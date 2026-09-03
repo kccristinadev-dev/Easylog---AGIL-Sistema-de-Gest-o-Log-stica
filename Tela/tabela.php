@@ -42,6 +42,13 @@ if (!isset($_SESSION['usuario']['id'])) {
                 oninput="filtrarTabela()"
             />
 
+            <select id="filtro-periodo" aria-label="Filtrar por período" onchange="filtrarTabela()">
+                <option value="todos">Todos os períodos</option>
+                <option value="Dia">Dia</option>
+                <option value="Mes">Mês</option>
+                <option value="Ano">Ano</option>
+            </select>
+
             <div class="botoes-filtro">
 
                 <button class="botao-filtro" type="button" onclick="mostrarIndicador('todos')">

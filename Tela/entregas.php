@@ -110,6 +110,13 @@ if ($conexao) {
             <h2>Entregas cadastradas</h2>
             <span id="contador-entregas" class="contador">0</span>
         </div>
+        <div class="filtros-entregas">
+            <input type="search" id="filtro-endereco" placeholder="Filtrar por cidade, bairro ou endereço">
+            <label><span>De</span><input type="date" id="filtro-data-inicio"></label>
+            <label><span>Até</span><input type="date" id="filtro-data-fim"></label>
+            <label class="filtro-check"><input type="checkbox" id="mostrar-historico"> Mostrar histórico</label>
+            <button type="button" class="botao-minimal" id="limpar-filtros">Limpar</button>
+        </div>
 
         <div class="tabela-container">
             <table>
@@ -146,7 +153,14 @@ if ($conexao) {
 const produtosDisponiveis = <?= json_encode($produtos) ?>;
 
 async function carregarEntregas() {
-    const resposta = await fetch('../process/entregas.php?acao=listar', {
+    const parametros = new URLSearchParams({
+        acao: 'listar',
+        historico: document.getElementById('mostrar-historico').checked ? 'true' : 'false',
+        endereco: document.getElementById('filtro-endereco').value.trim(),
+        data_inicio: document.getElementById('filtro-data-inicio').value,
+        data_fim: document.getElementById('filtro-data-fim').value
+    });
+    const resposta = await fetch(`../process/entregas.php?${parametros}`, {
         headers: { 'Accept': 'application/json' }
     });
     const json = await resposta.json();
@@ -201,7 +215,12 @@ async function carregarEntregas() {
 }
 
 async function carregarPedidos() {
-    const resposta = await fetch('../process/pedidos.php');
+    const parametros = new URLSearchParams({
+        historico: document.getElementById('mostrar-historico').checked ? 'true' : 'false',
+        data_inicio: document.getElementById('filtro-data-inicio').value,
+        data_fim: document.getElementById('filtro-data-fim').value
+    });
+    const resposta = await fetch(`../process/pedidos.php?${parametros}`);
     const json = await resposta.json();
     const tbody = document.getElementById('tbody-pedidos');
     if (!json.success || json.dados.length === 0) {
@@ -327,6 +346,20 @@ function slug(value) {
 }
 
 document.getElementById('form-entrega').addEventListener('submit', salvarEntrega);
+['filtro-endereco', 'filtro-data-inicio', 'filtro-data-fim', 'mostrar-historico'].forEach((id) => {
+    document.getElementById(id).addEventListener('input', () => {
+        carregarEntregas();
+        carregarPedidos();
+    });
+});
+document.getElementById('limpar-filtros').addEventListener('click', () => {
+    document.getElementById('filtro-endereco').value = '';
+    document.getElementById('filtro-data-inicio').value = '';
+    document.getElementById('filtro-data-fim').value = '';
+    document.getElementById('mostrar-historico').checked = false;
+    carregarEntregas();
+    carregarPedidos();
+});
 carregarEntregas();
 carregarPedidos();
 </script>

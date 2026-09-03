@@ -149,6 +149,19 @@ header h2{
     border-radius:8px;
 }
 
+#tabela-produtos tr.estoque-baixo td {
+    background: #fee2e2;
+    color: #991b1b;
+    border-color: #fca5a5;
+}
+
+#tabela-produtos tr.estoque-zerado td {
+    background: #dc2626;
+    color: #fff;
+    border-color: #991b1b;
+    font-weight: bold;
+}
+
 #tabela-produtos td{
     padding:5px 10px;
     border:1px solid var(--cor-borda);

@@ -219,6 +219,43 @@ select{
     transition:.25s;
 }
 
+.painel-desempenho {
+    width: min(900px, 100%);
+    margin: 32px auto 0;
+    padding: 24px;
+    border: 1px solid var(--cor-borda);
+    border-radius: 16px;
+    background: rgba(255,255,255,.08);
+}
+
+.rotulo-painel {
+    margin-bottom: 6px;
+    color: var(--cor-primaria);
+    font-size: .75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.painel-desempenho h3 {
+    color: var(--cor-primaria);
+}
+
+.grafico-inicial-area {
+    overflow-x: auto;
+    margin-top: 18px;
+}
+
+#grafico-desempenho {
+    display: block;
+    width: 100%;
+    min-width: 360px;
+}
+
+#sem-indicadores {
+    text-align: center;
+    padding: 40px 0;
+}
+
 .card-opcao:hover{
     transform:translateY(-5px);
     border-color:var(--cor-primaria);

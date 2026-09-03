@@ -39,12 +39,31 @@ if ($method === 'GET') {
 
     if ($acao === 'listar') {
         $status = $_GET['status'] ?? null;
+        $historico = filter_var($_GET['historico'] ?? false, FILTER_VALIDATE_BOOLEAN);
+        $endereco = trim((string) ($_GET['endereco'] ?? ''));
+        $dataInicio = trim((string) ($_GET['data_inicio'] ?? ''));
+        $dataFim = trim((string) ($_GET['data_fim'] ?? ''));
         $where = ['usuario_id = :usuario'];
         $parametros = [':usuario' => $usuarioId];
 
+        if (!$historico && ($status === null || $status === '' || $status === 'todos')) {
+            $where[] = "status NOT IN ('Entregue', 'Cancelada')";
+        }
         if ($status !== null && $status !== '' && $status !== 'todos') {
             $where[] = 'status = :status';
             $parametros[':status'] = $status;
+        }
+        if ($endereco !== '') {
+            $where[] = 'LOWER(endereco) LIKE :endereco';
+            $parametros[':endereco'] = '%' . strtolower($endereco) . '%';
+        }
+        if ($dataInicio !== '') {
+            $where[] = 'data_prevista >= :data_inicio';
+            $parametros[':data_inicio'] = $dataInicio;
+        }
+        if ($dataFim !== '') {
+            $where[] = 'data_prevista <= :data_fim';
+            $parametros[':data_fim'] = $dataFim;
         }
 
         $sql = 'SELECT * FROM entregas WHERE ' . implode(' AND ', $where) . ' ORDER BY data_prevista ASC, id DESC';
